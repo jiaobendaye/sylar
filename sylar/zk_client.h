@@ -30,7 +30,6 @@ public:
     public:
         static const int EPHEMERAL; // = ZOO_EPHEMERAL;
         static const int SEQUENCE;  //  = ZOO_SEQUENCE;
-        static const int CONTAINER; // = ZOO_CONTAINER;
     };
     class StateType {
     public:
@@ -39,8 +38,6 @@ public:
         static const int CONNECTING; // = ZOO_CONNECTING_STATE;
         static const int ASSOCIATING; // = ZOO_ASSOCIATING_STATE;
         static const int CONNECTED; // = ZOO_CONNECTED_STATE;
-        static const int READONLY; // = ZOO_READONLY_STATE;
-        static const int NOTCONNECTED; // = ZOO_NOTCONNECTED_STATE;
     };
 
     typedef std::shared_ptr<ZKClient> ptr;
@@ -51,7 +48,7 @@ public:
     ~ZKClient();
 
     bool init(const std::string& hosts, int recv_timeout, watcher_callback cb, log_callback lcb = nullptr);
-    int32_t setServers(const std::string& hosts);
+    // int32_t setServers(const std::string& hosts);
 
     int32_t create(const std::string& path, const std::string& val, std::string& new_path
                    , const struct ACL_vector* acl = &ZOO_OPEN_ACL_UNSAFE
@@ -59,12 +56,12 @@ public:
     int32_t exists(const std::string& path, bool watch, Stat* stat = nullptr);
     int32_t del(const std::string& path, int version = -1);
     int32_t get(const std::string& path, std::string& val, bool watch, Stat* stat = nullptr);
-    int32_t getConfig(std::string& val, bool watch, Stat* stat = nullptr);
+    // int32_t getConfig(std::string& val, bool watch, Stat* stat = nullptr);
     int32_t set(const std::string& path, const std::string& val, int version = -1, Stat* stat = nullptr);
     int32_t getChildren(const std::string& path, std::vector<std::string>& val, bool watch, Stat* stat = nullptr);
     int32_t close();
     int32_t getState();
-    std::string  getCurrentServer();
+    // std::string  getCurrentServer();
 
     bool reconnect();
 private:

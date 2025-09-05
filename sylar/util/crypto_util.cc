@@ -62,25 +62,48 @@ int32_t CryptoUtil::Crypto(const EVP_CIPHER* cipher, bool enc
                            ,void* out, int32_t* out_len) {
     int tmp_len = 0;
     bool has_error = false;
-    EVP_CIPHER_CTX ctx;
+    EVP_CIPHER_CTX* ctx = nullptr; // EVP_CIPHER_CTX 是不透明类型
+
     do {
-        //static CryptoInit s_crypto_init;
-        EVP_CIPHER_CTX_init(&ctx);
-        EVP_CipherInit_ex(&ctx, cipher, nullptr, (const uint8_t*)key
-                ,(const uint8_t*)iv, enc);
-        if(EVP_CipherUpdate(&ctx, (uint8_t*)out, &tmp_len, (const uint8_t*)in, in_len) != 1) {
+        ctx = EVP_CIPHER_CTX_new(); // 动态分配 EVP_CIPHER_CTX
+        if (!ctx) {
+            std::cerr << "Failed to allocate EVP_CIPHER_CTX" << std::endl;
+            has_error = true;
+            break;
+        }
+
+        // 初始化 EVP_CIPHER_CTX
+        if (EVP_CipherInit_ex(ctx, cipher, nullptr, (const uint8_t*)key,
+                              (const uint8_t*)iv, enc) != 1) {
+            std::cerr << "Failed to initialize EVP_CIPHER_CTX" << std::endl;
+            has_error = true;
+            break;
+        }
+
+        // 加密/解密数据
+        if (EVP_CipherUpdate(ctx, (uint8_t*)out, &tmp_len, (const uint8_t*)in, in_len) != 1) {
+            std::cerr << "Failed in EVP_CipherUpdate" << std::endl;
             has_error = true;
             break;
         }
         *out_len = tmp_len;
-        if(EVP_CipherFinal_ex(&ctx, (uint8_t*)out + tmp_len, &tmp_len) != 1) {
+
+        // 完成加密/解密操作
+        if (EVP_CipherFinal_ex(ctx, (uint8_t*)out + tmp_len, &tmp_len) != 1) {
+            std::cerr << "Failed in EVP_CipherFinal_ex" << std::endl;
             has_error = true;
             break;
         }
         *out_len += tmp_len;
-    } while(0);
-    EVP_CIPHER_CTX_cleanup(&ctx);
-    if(has_error) {
+
+    } while (0);
+
+    // 释放资源
+    if (ctx) {
+        EVP_CIPHER_CTX_free(ctx); // 释放 EVP_CIPHER_CTX 资源
+    }
+
+    if (has_error) {
         return -1;
     }
     return *out_len;
