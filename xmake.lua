@@ -1,5 +1,7 @@
 set_project("sylar")
 
+add_rules("mode.debug", "mode.release")
+
 if is_mode("release") then
     set_optimize("faster")
     set_strip("all")

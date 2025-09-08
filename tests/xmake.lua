@@ -12,7 +12,7 @@ function all_tests()
     for _, x in ipairs(os.files("**.cc")) do
         local item = {}
         local s = path.filename(x)
-        if s == "test_orm.cc" then
+        if s == "test_orm.cc" or s == "test_module.cc" then
             -- TODO
         else
             table.insert(item, s:sub(1, #s - 3))       -- target
@@ -22,6 +22,10 @@ function all_tests()
     end
     return res
 end
+
+target("test_module")
+    set_kind("shared")
+    add_files("test_module.cc")
 
 for _, test in ipairs(all_tests()) do
 target(test[1])

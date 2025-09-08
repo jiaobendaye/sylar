@@ -34,7 +34,7 @@ public:
      * @param[in] use_caller 是否使用当前调用线程
      * @param[in] name 协程调度器名称
      */
-    Scheduler(size_t threads = 1, bool use_caller = true, const std::string& name = "");
+    Scheduler(size_t threads = 1, bool use_caller = true, const std::string& name = "", bool hook = true);
 
     /**
      * @brief 析构函数
@@ -243,6 +243,8 @@ protected:
     bool m_autoStop = false;
     /// 主线程id(use_caller)
     int m_rootThread = 0;
+    // 开启hook
+    bool m_isHook = true;
 };
 
 class SchedulerSwitcher : public Noncopyable {

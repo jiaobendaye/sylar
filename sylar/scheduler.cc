@@ -10,7 +10,7 @@ static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 static thread_local Scheduler* t_scheduler = nullptr;
 static thread_local Fiber* t_scheduler_fiber = nullptr;
 
-Scheduler::Scheduler(size_t threads, bool use_caller, const std::string& name)
+Scheduler::Scheduler(size_t threads, bool use_caller, const std::string& name, bool hook)
     :m_name(name) {
     SYLAR_ASSERT(threads > 0);
 
@@ -31,6 +31,7 @@ Scheduler::Scheduler(size_t threads, bool use_caller, const std::string& name)
         m_rootThread = -1;
     }
     m_threadCount = threads;
+    m_isHook = hook;
 }
 
 Scheduler::~Scheduler() {
@@ -135,7 +136,7 @@ void Scheduler::setThis() {
 
 void Scheduler::run() {
     SYLAR_LOG_DEBUG(g_logger) << m_name << " run";
-    set_hook_enable(true);
+    set_hook_enable(m_isHook);
     setThis();
     if(sylar::GetThreadId() != m_rootThread) {
         t_scheduler_fiber = Fiber::GetThis().get();
