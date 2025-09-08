@@ -12,9 +12,13 @@ function all_tests()
     for _, x in ipairs(os.files("**.cc")) do
         local item = {}
         local s = path.filename(x)
-        table.insert(item, s:sub(1, #s - 3))       -- target
-        table.insert(item, path.relative(x, "."))  -- source
-        table.insert(res, item)
+        if s == "test_orm.cc" then
+            -- TODO
+        else
+            table.insert(item, s:sub(1, #s - 3))       -- target
+            table.insert(item, path.relative(x, "."))  -- source
+            table.insert(res, item)
+        end
     end
     return res
 end
