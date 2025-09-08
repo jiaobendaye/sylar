@@ -42,8 +42,15 @@ target("sylar")
     set_kind("shared")
     add_files( "**/*.cc", "*.cc", "**/*.c")
     remove_files("main.cc")
+    remove_files("orm/*.cc")
     add_deps("pb")
     add_files("uri.rl", "http/http11_parser.rl", "http/httpclient_parser.rl", {rule = "ragel"})
+
+
+target("orm")
+    set_kind("binary")
+    add_files("orm/*.cc")
+    add_deps("sylar")
 
 
 target("sylar-main")
