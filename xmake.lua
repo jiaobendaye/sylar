@@ -1,5 +1,7 @@
 set_project("sylar")
 
+set_policy("package.requires_lock", true)
+
 add_rules("mode.debug", "mode.release")
 
 if is_mode("release") then
@@ -19,7 +21,7 @@ add_requires("apt::libzookeeper-mt-dev", {alias = "zookeeper", system=true})
 add_requires("apt::libmysqlclient-dev", {alias = "mysql", system=true})
 -- add_requires("apt::libboost-all-dev", {alias = "boost", system=true})
 add_requires("protobuf-cpp", {alias = "protobuf", configs = {tools = true}})
-add_requires("boost", "jsoncpp", "sqlite3", "yaml-cpp", "hiredis-vip", "tinyxml2", "jemalloc", "libevent", "openssl", "zlib")
+add_requires("boost 1.83.0", "jsoncpp", "sqlite3", "yaml-cpp", "hiredis-vip", "tinyxml2", "jemalloc", "libevent", "openssl", "zlib")
 add_syslinks("pthread", "dl")
 
 add_packages("jsoncpp", "yaml-cpp", "hiredis-vip", "sqlite3", "tinyxml2", "jemalloc", "libevent", "openssl", "zlib")
