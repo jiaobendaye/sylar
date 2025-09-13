@@ -28,3 +28,6 @@ stamp-h1
 *.pc
 depcomp
 *.xcodeproj
+.xmake/
+.vscode/
+build/

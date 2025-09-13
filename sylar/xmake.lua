@@ -39,7 +39,7 @@ target("pb")
 
 
 target("sylar")
-    set_kind("shared")
+    set_kind("static")
     add_files( "**/*.cc", "*.cc", "**/*.c")
     remove_files("main.cc")
     remove_files("orm/*.cc")

@@ -8,7 +8,7 @@
 #include "fd_manager.h"
 #include "macro.h"
 
-sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 namespace sylar {
 
 static sylar::ConfigVar<int>::ptr g_tcp_connect_timeout =
